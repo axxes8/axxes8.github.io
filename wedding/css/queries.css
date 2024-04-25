@@ -240,7 +240,7 @@
     }
 
     .rsvp {
-        padding-top: 40px;
+        padding-top: 220px;
     }
 
     footer .social-share {
@@ -349,9 +349,9 @@
         padding-bottom: 0;
     }
 
-    .down-arrow {
+    /* .down-arrow {
         display: none;
-    }
+    } */
 
 }
 
