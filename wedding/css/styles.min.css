@@ -3,8 +3,8 @@
 @import"https://fonts.googleapis.com/css?family=Nunito:400,300,700";
 
 :root{
-    --accent_color_1: rgb(175, 0, 0);
-    --accent_color_2: rgb(255, 252, 66);
+    --accent_color_1: #af0000;
+    --accent_color_2: #fffc42;
     --accent_color_3: #001d5f;
 }
 
