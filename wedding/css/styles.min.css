@@ -675,12 +675,15 @@ header .member-actions{
     width:100%
 }
 #eng-pics img{
-    width:100%;
-    height:auto;
+    width:auto;
+    height:400px;
     -moz-transition:all 300ms ease-in-out;
     -o-transition:all 300ms ease-in-out;
     -webkit-transition:all 300ms ease-in-out;
     transition:all 300ms ease-in-out
+}
+.eng-pic-hoz{
+    transform: translate(-25%, 0);
 }
 #eng-pics .img-wrap{
     position:relative;
@@ -691,6 +694,8 @@ header .member-actions{
     position:absolute;
     width:100%;
     height:100%;
+    max-width: 266px;
+    min-width: 266px;
     background-color:rgba(255,255,255,.5);
     -moz-transition:all 300ms ease-in-out;
     -o-transition:all 300ms ease-in-out;
@@ -709,13 +714,18 @@ header .member-actions{
     top:6px;
     right:6px
 }
-#eng-pics .img-wrap:hover img,#eng-pics .img-wrap:focus img{
+
+#eng-pics .col-md-2{
+    min-width: 266px;
+    max-width: 266px;
+}
+/* #eng-pics .img-wrap:hover img,#eng-pics .img-wrap:focus img{
     -moz-transform:scale(1.1);
     -ms-transform:scale(1.1);
     -o-transform:scale(1.1);
     -webkit-transform:scale(1.1);
     transform:scale(1.1)
-}
+} */
 #eng-pics .img-wrap:hover .overlay,#eng-pics .img-wrap:focus .overlay{
     -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=1)";
     filter:alpha(opacity=1);
