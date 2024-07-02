@@ -214,10 +214,8 @@ $(document).ready(function () {
 
         $('#alert-wrapper').html(alert_markup('info', '<strong>Just a sec!</strong> We are saving your details.'));
 
-        if (MD5($('#invite_code').val()) === '2248724b0c019e48ad99a6791e8213b9' || // reception
-            MD5($('#invite_code').val()) === '770b684ee56012732d8aa010992500d0' || // dinner
-            MD5($('#invite_code').val()) === '50da9f4387533e5abd809691ed7e8c72' || // wedding
-            MD5($('#invite_code').val()) === '1c801e287705a6782330f12a98faf4aa') { // sealing
+        if (MD5($('#invite_code').val()) === '2248724b0c019e48ad99a6791e8213b9' || // dinner
+            MD5($('#invite_code').val()) === 'e20e7608efca9be0b9d988b8965a0204') { // sealing
             
                 $.post('https://script.google.com/macros/s/AKfycbxhBUHtnGAVZ2pr2nPxZJ9bZK43MW1sYfsgnOHKkRQnx3eAbKmzKu7lxZpnTbQF39q1Dw/exec', data)
                     .done(function (data) {
@@ -235,6 +233,7 @@ $(document).ready(function () {
                     });
         } else {
             $('#alert-wrapper').html(alert_markup('danger', '<strong>Sorry!</strong> Your invite code is incorrect.'));
+            console.log(data)
         }
     });
     
