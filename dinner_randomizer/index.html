@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dinner Randomizer</title>
+  </head>
+  <body>
+    <h1>Dinner Randomizer</h1>
+    <button onclick="randomizeDinners()">Randomize Dinners</button>
+    <div id="week"></div>
+    <style>
+      .calendar {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        max-width: 800px;
+        margin: 24px auto;
+      }
+      .calendar-day {
+        background: #f8f8f8;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px #ccc;
+        padding: 16px;
+        text-align: center;
+        font-size: 1.1em;
+      }
+      .calendar-special {
+        grid-column: span 3;
+        background: #e0f7fa;
+        margin-top: 8px;
+      }
+    </style>
+    <script>
+      // Embedded lists
+      const lists = {
+        "Monday": ["Chicken Alfredo", "Chicken Parmesan Baked Ziti", "Spaghetti", "Mac and Cheese", "Mac and Cheese Hot Dogs", "Skillet Lasagna", "Garlic Parmesan Pasta", "Cream Cheese Bacon Chicken Pasta", "Goulash"],
+        "Tuesday": ["Nacho Bar", "Tacos", "Enchiladas","Taco Salad"],
+        "Wednesday": ["Stack Dinners", "Orange Chicken", "Spanish Rice"],
+        "Thursday": ["Breakfast Burritos", "Omelettes", "Pancakes", "Waffles", "French Toast"],
+        "Friday": ["Pizza Bombs", "Sloppy Joes", "Grilled Cheese", "Cheeseburgers", "Bacon Cheeseburgers", "Hot Dogs", "Chicken Wraps", "Idaho Nachos", "Chicken Nuggets", "Pitas"],
+        "Weekend": ["Stogonoff", "Potato Bar", "Mashed Potatoes and Steak", "Potato Soup", "Wontons", "Cheesy Potato Casserole", "Homemade Chicken Nuggets", "Bubble Pizza", "Pigs in a Blanket", "Navajo Tacos", "Funeral Potatoes"],
+        "Dessert": ["Cosmic Brownies", "Fluffy Air Fryer Churro Bites", "Fried Strawberry Cheesecake Sandwiches", "Cinnamon Sugar Pizza made with Crescent Rolls", "Cinnamon Roll French Toast", "No Bake Chocolate Peanut Butter Bars", "Strawberry Cream Cheese Bites", "3 Ingredient Peanut Butter Cups"],
+        "New things": ["Mongolian Ground Beef Noodles","Philly Cheesesteaks","Manicotti","Ultimate Bacon Cheeseburger Rollups","Crispy Wonton Mozzarella Sticks","Chicken Bacon Ranch Rollups","Crispy Cheese and Bacon Potatoes","3 Ingredient Teriyaki Chicken","Meatballs","Bacon Ranch Chicken Bake","Strawberry Cream Cheese French Toast Rollups","Potato Wedges"]
+      };
+
+      const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+
+      // Store current picks for each day
+      let currentPicks = {};
+
+      function pickRandom(day) {
+
+        let items;
+        if (day === "Saturday" || day === "Sunday") {
+          items = lists["Weekend"];
+        } else {
+          items = lists[day];
+        }
+        return items[Math.floor(Math.random() * items.length)];
+      }
+
+      function randomizeDinners() {
+        // Randomize all days
+        days.forEach(day => {
+          currentPicks[day] = pickRandom(day);
+        });
+        if (lists["Dessert"]) {
+          currentPicks["Dessert"] = pickRandom("Dessert");
+        }
+        if (lists["New things"]) {
+          currentPicks["New things"] = pickRandom("New things");
+        }
+        renderCalendar();
+      }
+
+      function randomizeDay(day) {
+        currentPicks[day] = pickRandom(day);
+        renderCalendar();
+      }
+
+      function renderCalendar() {
+        const weekDiv = document.getElementById('week');
+        weekDiv.innerHTML = '';
+        const calendar = document.createElement('div');
+        calendar.className = 'calendar';
+        days.forEach((day, idx) => {
+          const el = document.createElement('div');
+          el.className = 'calendar-day';
+          el.innerHTML = `<strong>${day}</strong><br>${currentPicks[day] || ''}`;
+          el.style.cursor = 'pointer';
+          el.title = 'Click to randomize this day';
+          el.onclick = () => randomizeDay(day);
+          calendar.appendChild(el);
+        });
+        // Dessert
+        if (currentPicks["Dessert"]) {
+          const el = document.createElement('div');
+          el.className = 'calendar-day calendar-special';
+          el.innerHTML = `<strong>Dessert:</strong> ${currentPicks["Dessert"]}`;
+          calendar.appendChild(el);
+        }
+        // New things
+        if (currentPicks["New things"]) {
+          const el = document.createElement('div');
+          el.className = 'calendar-day calendar-special';
+          el.innerHTML = `<strong>New thing:</strong> ${currentPicks["New things"]}`;
+          calendar.appendChild(el);
+        }
+        weekDiv.appendChild(calendar);
+      }
+
+      // Initial randomization
+      randomizeDinners();
+    </script>
+  </body>
+</html>
