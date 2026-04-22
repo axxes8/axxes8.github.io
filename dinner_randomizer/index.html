@@ -120,6 +120,11 @@
         renderCalendar();
       }
 
+      function randomizeSpecial(category) {
+        currentPicks[category] = pickRandom(category);
+        renderCalendar();
+      }
+
       function renderCalendar() {
         const weekDiv = document.getElementById('week');
         weekDiv.innerHTML = '';
@@ -139,6 +144,9 @@
           const el = document.createElement('div');
           el.className = 'calendar-day calendar-special';
           el.innerHTML = `<strong>Dessert:</strong> ${currentPicks["Dessert"]}`;
+          el.style.cursor = 'pointer';
+          el.title = 'Click to randomize dessert';
+          el.onclick = () => randomizeSpecial("Dessert");
           calendar.appendChild(el);
         }
         // New things
@@ -146,6 +154,9 @@
           const el = document.createElement('div');
           el.className = 'calendar-day calendar-special';
           el.innerHTML = `<strong>New thing:</strong> ${currentPicks["New things"]}`;
+          el.style.cursor = 'pointer';
+          el.title = 'Click to randomize new thing';
+          el.onclick = () => randomizeSpecial("New things");
           calendar.appendChild(el);
         }
         weekDiv.appendChild(calendar);
