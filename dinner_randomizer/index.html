@@ -8,9 +8,12 @@
   </head>
   <body>
     <h1>Dinner Randomizer</h1>
-    <button onclick="randomizeDinners()">Randomize Dinners</button>
     <div id="week"></div>
+    <button onclick="randomizeDinners()">Randomize Dinners</button>
     <style>
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+      }
       .calendar {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -31,18 +34,33 @@
         background: #e0f7fa;
         margin-top: 8px;
       }
+      button {
+        background: #f8f8f8;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px #ccc;
+        padding: 16px 32px;
+        font-size: 1.1em;
+        cursor: pointer;
+        margin: 24px auto;
+        display: block;
+        transition: background-color 0.2s;
+      }
+      button:hover {
+        background: #efefef;
+      }
     </style>
     <script>
       // Embedded lists
       const lists = {
         "Monday": ["Chicken Alfredo", "Chicken Parmesan Baked Ziti", "Spaghetti", "Mac and Cheese", "Mac and Cheese Hot Dogs", "Skillet Lasagna", "Garlic Parmesan Pasta", "Cream Cheese Bacon Chicken Pasta", "Goulash"],
-        "Tuesday": ["Nacho Bar", "Tacos", "Enchiladas","Taco Salad","Idaho Nachos"],
-        "Wednesday": ["Stack Dinners", "Orange Chicken", "Spanish Rice"],
+        "Tuesday": ["Nacho Bar", "Tacos", "Taco Salad", "Idaho Nachos", "Quesadillas", "Chicken Salad"],
+        "Wednesday": ["Stack Dinners", "Orange Chicken", "Spanish Rice", "Butter Chicken", "Garlic Chicken", "Teriyaki Chicken", "Sticky Garlic Chicken Bites"],
         "Thursday": ["Breakfast Burritos", "Omelettes", "Pancakes", "Waffles", "French Toast", "Strawberry Cream Cheese French Toast Rollups"],
-        "Friday": ["Pizza Bombs", "Sloppy Joes", "Grilled Cheese", "Cheeseburgers", "Bacon Cheeseburgers", "Hot Dogs", "Chicken Wraps", "Idaho Nachos", "Chicken Nuggets", "Pitas", "Chicken Salad", "Chicken Wraps"],
-        "Weekend": ["Philly Cheesesteaks","Stogonoff", "Potato Bar", "Mashed Potatoes and Steak", "Potato Soup", "Wontons", "Cheesy Potato Casserole", "Homemade Chicken Nuggets", "Bubble Pizza", "Pigs in a Blanket", "Navajo Tacos", "Funeral Potatoes"],
+        "Friday": ["Pizza Bombs", "Sloppy Joes", "Grilled Cheese", "Cheeseburgers", "Bacon Cheeseburgers", "Hot Dogs", "Chicken Wraps", "Chicken Nuggets", "Pitas", "Tortilla Pizza"],
+        "Weekend": ["Philly Cheesesteaks", "Stogonoff", "Mashed Potatoes and Steak", "Potato Soup", "Wontons", "Homemade Chicken Nuggets", "Bubble Pizza", "Pigs in a Blanket", "Garlic Parmesan Chicken Tenders", "Crispy Bacon and Cheese Potatoes", "Sliders", "French Bread Pizza", "Garlic Parmesan Mac and Cheese", "Wings"],
         "Dessert": ["Cosmic Brownies", "Fluffy Air Fryer Churro Bites", "Fried Strawberry Cheesecake Sandwiches", "Cinnamon Sugar Pizza made with Crescent Rolls", "Cinnamon Roll French Toast", "No Bake Chocolate Peanut Butter Bars", "Strawberry Cream Cheese Bites", "3 Ingredient Peanut Butter Cups","Cinnamon Rolls","Pumpkin Chocolate Chip Bread"],
-        "New things": ["Mongolian Ground Beef Noodles","Manicotti","Ultimate Bacon Cheeseburger Rollups","Crispy Wonton Mozzarella Sticks","Chicken Bacon Ranch Rollups","Crispy Cheese and Bacon Potatoes","Meatballs","Bacon Ranch Chicken Bake","Potato Wedges","Breakfast Quesadillas","Rosemary Chicken with Potatoes","Buttermilk Fried Chicken","Smothered Bacon Chicken","Taco Bowls","Taco Fries",""]
+        "New things": ["Mongolian Ground Beef Noodles","Manicotti","Ultimate Bacon Cheeseburger Rollups","Crispy Wonton Mozzarella Sticks","Chicken Bacon Ranch Rollups","Crispy Cheese and Bacon Potatoes","Meatballs","Bacon Ranch Chicken Bake","Potato Wedges","Breakfast Quesadillas","Rosemary Chicken with Potatoes","Buttermilk Fried Chicken","Smothered Bacon Chicken", "Crack Chicken Tenders", "Fried Chicken"]
       };
 
       const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -51,14 +69,19 @@
       // Store current picks for each day
       let currentPicks = {};
 
-      function pickRandom(day) {
-
+      function pickRandom(day, exclude = null) {
         let items;
         if (day === "Saturday" || day === "Sunday") {
           items = lists["Weekend"];
         } else {
           items = lists[day];
         }
+        
+        // Filter out the excluded item if provided
+        if (exclude !== null) {
+          items = items.filter(item => item !== exclude);
+        }
+        
         return items[Math.floor(Math.random() * items.length)];
       }
 
@@ -67,6 +90,12 @@
         days.forEach(day => {
           currentPicks[day] = pickRandom(day);
         });
+        
+        // Ensure Saturday and Sunday don't have the same dish
+        if (currentPicks["Saturday"] === currentPicks["Sunday"]) {
+          currentPicks["Sunday"] = pickRandom("Sunday", currentPicks["Saturday"]);
+        }
+        
         if (lists["Dessert"]) {
           currentPicks["Dessert"] = pickRandom("Dessert");
         }
@@ -78,6 +107,16 @@
 
       function randomizeDay(day) {
         currentPicks[day] = pickRandom(day);
+        
+        // If randomizing Saturday, check Sunday doesn't match
+        if (day === "Saturday" && currentPicks["Saturday"] === currentPicks["Sunday"]) {
+          currentPicks["Sunday"] = pickRandom("Sunday", currentPicks["Saturday"]);
+        }
+        // If randomizing Sunday, check Saturday doesn't match
+        if (day === "Sunday" && currentPicks["Sunday"] === currentPicks["Saturday"]) {
+          currentPicks["Saturday"] = pickRandom("Saturday", currentPicks["Sunday"]);
+        }
+        
         renderCalendar();
       }
 
